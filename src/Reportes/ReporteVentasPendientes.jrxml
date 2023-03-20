@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteVentasPendientes" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="98863d12-87ff-418d-ae09-6d3611650fc1">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FechaInicio" class="java.lang.String"/>
+	<parameter name="FechaFin" class="java.lang.String"/>
+	<parameter name="Estado" class="java.lang.String"/>
+	<parameter name="Fecha" class="java.lang.String"/>
+	<parameter name="Nombre" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT tfr.nombreCliente, tfr.direccionCliente, tfr.DUI, tfr.telefonoCliente, tfr.fechaDevolucion, tefr.estadoFacturaRenta FROM tbFacturaRenta tfr, tbDetalleFacturaRenta tdfr, tbEstadoFacturaRenta tefr WHERE tfr.idFacturaRenta = tdfr.idFacturaRenta AND tdfr.idEstadoFacturaRenta = tefr.idEstadoFacturaRenta AND tfr.fechaDevolucion >= $P{FechaInicio} AND tfr.fechaDevolucion <= $P{FechaFin} AND tdfr.idEstadoFacturaRenta = $P{Estado}]]>
+	</queryString>
+	<field name="nombreCliente" class="java.lang.String"/>
+	<field name="direccionCliente" class="java.lang.String"/>
+	<field name="DUI" class="java.lang.String"/>
+	<field name="telefonoCliente" class="java.math.BigDecimal"/>
+	<field name="fechaDevolucion" class="java.sql.Date"/>
+	<field name="estadoFacturaRenta" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="572" height="79" backcolor="#602C50" uuid="0d17507e-fed0-474e-bab0-1c9efa0e80b7"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="234" y="20" width="107" height="36" forecolor="#FFFFFF" uuid="8104fb3e-c67b-4282-9f41-57c3626c8cfd"/>
+				<textElement>
+					<font fontName="Century Gothic" size="24"/>
+				</textElement>
+				<text><![CDATA[E-Dream]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="55" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="12" width="219" height="30" backcolor="#DD3149" uuid="c6f0d0ed-0056-40e0-8971-3d42387c133c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="12" y="19" width="186" height="23" forecolor="#FFFFFF" uuid="8ac2b1bc-afb9-4262-83e8-ee9ae17d5a5f"/>
+				<textElement>
+					<font fontName="Century Gothic" size="12"/>
+				</textElement>
+				<text><![CDATA[Rentas Pendientes]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="353" y="12" width="219" height="43" backcolor="#DD3149" uuid="f1852364-a215-4ff4-b495-01bd9cd539b5"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="363" y="12" width="38" height="23" forecolor="#FFFFFF" uuid="7347c02a-923e-4fbb-8506-32f9b71fb24b"/>
+				<textElement>
+					<font fontName="Century Gothic" size="10"/>
+				</textElement>
+				<text><![CDATA[Autor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="35" width="92" height="20" forecolor="#FFFFFF" uuid="371723c7-1019-4f8c-9b0e-c9159042e8c4"/>
+				<text><![CDATA[Fecha Creación:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="401" y="12" width="100" height="20" forecolor="#FFFFFF" uuid="db41d05e-b81c-488f-9f51-cec400191a96"/>
+				<textFieldExpression><![CDATA[$P{Nombre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="455" y="35" width="100" height="20" forecolor="#FFFFFF" uuid="faae8873-4b9b-4c5d-96c8-399c76d43cb0"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="47" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="27" width="572" height="20" backcolor="#DD3149" uuid="c0f71cba-4704-439b-8b77-12c53c13ab86"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="27" width="84" height="20" forecolor="#FFFFFF" uuid="a7e31830-1f8e-4f01-b9fc-f922c5efdccb"/>
+				<text><![CDATA[Nombre Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="27" width="100" height="20" forecolor="#FFFFFF" uuid="4ab8e79b-724c-4df7-9656-a908814405b9"/>
+				<text><![CDATA[Dirección del cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="27" width="40" height="20" forecolor="#FFFFFF" uuid="311160b8-901f-4a59-b97a-a1b39decc268"/>
+				<text><![CDATA[DUI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="27" width="50" height="20" forecolor="#FFFFFF" uuid="16a4d279-07e4-4577-8b21-30619f928bee"/>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="27" width="92" height="20" forecolor="#FFFFFF" uuid="eb448fb2-8be2-42b4-a1f5-55f4c1e6d30c"/>
+				<text><![CDATA[Fecha Devolución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="27" width="92" height="20" forecolor="#FFFFFF" uuid="26a2df26-6779-46dc-916a-cd7e964d722d"/>
+				<text><![CDATA[Estado Factura]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="84" height="62" uuid="569794a2-a35a-400f-ab96-53a42b529c63"/>
+				<textFieldExpression><![CDATA[$F{nombreCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="0" width="100" height="62" uuid="d5929281-3045-4819-8dcb-c402da308a14"/>
+				<textFieldExpression><![CDATA[$F{direccionCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="219" y="0" width="54" height="62" uuid="5aa506fd-9392-4598-8b07-e068fa055e33"/>
+				<textFieldExpression><![CDATA[$F{DUI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="291" y="0" width="50" height="62" uuid="c465733d-af4f-4444-a043-62d55028406b"/>
+				<textFieldExpression><![CDATA[$F{telefonoCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="363" y="0" width="100" height="20" uuid="000c48db-ccd7-4350-98fc-df71768374c6"/>
+				<textFieldExpression><![CDATA[$F{fechaDevolucion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="92" height="20" uuid="d0018d59-08e5-4446-9ac2-592575230cd5"/>
+				<textFieldExpression><![CDATA[$F{estadoFacturaRenta}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="71" width="572" height="1" uuid="1ebd6fa2-81ea-4e18-9850-0d085bf6ec22"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="455" y="24" width="80" height="20" uuid="c779129f-80ba-487d-a975-b7b555c0f92d"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="536" y="24" width="40" height="20" uuid="9d8add5a-bc5c-4672-981d-e29ba741d70e"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

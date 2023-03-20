@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteEmpleado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18986f11-6d81-4f78-af0e-ffa9bbe041f2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="anoanteriorI" class="java.lang.String"/>
+	<parameter name="anoanteriorF" class="java.lang.String"/>
+	<parameter name="mesanteriorI" class="java.lang.String"/>
+	<parameter name="mesanteriorF" class="java.lang.String"/>
+	<parameter name="anoanterior" class="java.lang.String"/>
+	<parameter name="mesanterior" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select emp.idEmpleado,(emp.nombreEmpleado+' '+emp.apellidoEmpleado) as nombreEmpleado,
+emp.sexo,emp.DUI,emp.telefonoEmpleado,emp.correoEmpleado,(DATEDIFF(YEAR,emp.edadEmpleado,GETDATE()))
+as edad,
+(select COUNT(fav.idEmpleado) from tbEmpleado as emp1, tbFacturaVenta as fav where emp.idEmpleado=fav.idEmpleado and emp1.idEmpleado=emp.idEmpleado)as ventas,
+(select COUNT(fav.idEmpleado) from tbEmpleado as emp2, tbFacturaRenta as fav where emp.idEmpleado=fav.idEmpleado and emp2.idEmpleado=emp.idEmpleado) as rentas,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp3, tbFacturaVenta as fav where emp.idEmpleado=fav.idEmpleado and emp3.idEmpleado=emp.idEmpleado and fav.fechaFacturaVenta >=$P{anoanteriorI} and fav.fechaFacturaVenta<=$P{anoanteriorF}) as ventasano,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp4, tbFacturaVenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaVenta >=$P{mesanteriorI} and fav.fechaFacturaVenta<=$P{mesanteriorF} and emp4.idEmpleado=emp.idEmpleado) as ventasmes,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp5, tbFacturaRenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaRenta >=$P{anoanteriorI} and fav.fechaFacturaRenta<=$P{anoanteriorF} and emp5.idEmpleado=emp.idEmpleado) as rentasano,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp6, tbFacturaRenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaRenta >$P{mesanteriorI} and fav.fechaFacturaRenta<=$P{mesanteriorF} and emp6.idEmpleado=emp.idEmpleado) as rentasmes,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp7, tbFacturaVenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaVenta >=$P{anoanterior} and fav.fechaFacturaVenta<=GETDATE() and emp7.idEmpleado=emp.idEmpleado) as ventasentreano,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp8, tbFacturaRenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaRenta >=$P{anoanterior} and fav.fechaFacturaRenta<=GETDATE() and emp8.idEmpleado=emp.idEmpleado) as rentasentreano,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp9, tbFacturaVenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaVenta >=$P{mesanterior} and fav.fechaFacturaVenta<=GETDATE() and emp9.idEmpleado=emp.idEmpleado) as ventasentremes,
+(select(COUNT(fav.idEmpleado)) from tbEmpleado as emp10, tbFacturaRenta as fav where emp.idEmpleado=fav.idEmpleado and fav.fechaFacturaRenta >=$P{mesanterior} and fav.fechaFacturaRenta<=GETDATE() and emp10.idEmpleado=emp.idEmpleado) as rentasentremes
+from tbEmpleado as emp, tbFacturaVenta as fav, tbFacturaRenta as far where fav.idEmpleado=emp.idEmpleado and far.idEmpleado=emp.idEmpleado
+group by emp.idEmpleado, emp.sexo,emp.DUI,emp.telefonoEmpleado,emp.nombreEmpleado,emp.apellidoEmpleado,emp.edadEmpleado,emp.correoEmpleado;]]>
+	</queryString>
+	<field name="idEmpleado" class="java.lang.Integer"/>
+	<field name="nombreEmpleado" class="java.lang.String"/>
+	<field name="sexo" class="java.lang.String"/>
+	<field name="DUI" class="java.lang.String"/>
+	<field name="telefonoEmpleado" class="java.lang.String"/>
+	<field name="correoEmpleado" class="java.lang.String"/>
+	<field name="edad" class="java.lang.Integer"/>
+	<field name="ventas" class="java.lang.Integer"/>
+	<field name="rentas" class="java.lang.Integer"/>
+	<field name="ventasano" class="java.lang.Integer"/>
+	<field name="ventasmes" class="java.lang.Integer"/>
+	<field name="rentasano" class="java.lang.Integer"/>
+	<field name="rentasmes" class="java.lang.Integer"/>
+	<field name="ventasentreano" class="java.lang.Integer"/>
+	<field name="rentasentreano" class="java.lang.Integer"/>
+	<field name="ventasentremes" class="java.lang.Integer"/>
+	<field name="rentasentremes" class="java.lang.Integer"/>
+	<variable name="edad" class="java.lang.String"/>
+	<group name="Empleados">
+		<groupExpression><![CDATA[$F{idEmpleado}]]></groupExpression>
+		<groupHeader>
+			<band height="45">
+				<rectangle>
+					<reportElement x="0" y="0" width="555" height="45" backcolor="#D66A6B" uuid="14c5c37f-dc8c-47df-a8b5-6544d711edeb"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="10" y="12" width="22" height="20" forecolor="#FFFFFF" uuid="990e8f76-e4a5-4d9e-9d0a-5fb66058736c"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<text><![CDATA[N°:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="46" y="12" width="100" height="20" forecolor="#FFFFFF" uuid="7e5b3201-89d2-450a-b73e-aa0c63dc0eda"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{idEmpleado}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="243" y="12" width="131" height="20" forecolor="#FFFFFF" uuid="5c0291da-6b36-4228-b412-b13cf9f57fb1"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nombreEmpleado}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<title>
+		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="79" backcolor="#5E2D4F" uuid="37e042f3-205a-4817-8e3f-61290a6a476b"/>
+			</rectangle>
+			<textField>
+				<reportElement x="243" y="20" width="136" height="39" forecolor="#FFFFFF" uuid="672cd5a5-6bfd-4930-b387-9cc0ec9e6fb6"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="35" backcolor="#D66A6B" uuid="57d1058b-b8b1-41d2-ab48-ae32745fa2f2"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="15" width="116" height="20" forecolor="#FFFFFF" uuid="04497329-91c0-4a5b-9233-9e1e79e316e1"/>
+				<text><![CDATA[Fecha de elaboración:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="116" y="15" width="100" height="20" forecolor="#FFFFFF" uuid="1eb52106-76d2-4232-8315-feea87e670df"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="405" y="15" width="50" height="20" forecolor="#FFFFFF" uuid="ce60fc33-242b-43b9-a37d-a94946c53d15"/>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="455" y="15" width="100" height="20" forecolor="#FFFFFF" uuid="2b71684c-38ed-457a-8533-6a0cfd41c37f"/>
+				<textFieldExpression><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="414" y="2" width="100" height="20" uuid="4aafa4a4-b74e-49a0-b0e4-5840c9dbe5e2"/>
+				<text><![CDATA[correoEmpleado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="539" splitType="Stretch">
+			<rectangle>
+				<reportElement x="300" y="80" width="157" height="26" backcolor="#D66A6B" uuid="d2655aa1-4cc9-47ce-89e9-3aeb30aa9dc5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="138" width="167" height="26" backcolor="#D66A6B" uuid="2a49765f-5706-4a91-8c64-871dbd188ad8"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="298" y="138" width="157" height="26" backcolor="#D66A6B" uuid="9a41bbb7-aefd-4cac-80a8-973ef08e4c0f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="16" width="36" height="20" forecolor="#000000" uuid="4952edae-0133-4a70-845b-589aad0d11ab"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="46" y="16" width="100" height="20" uuid="21c3bbcd-dde8-4672-ab79-06cea528e072"/>
+				<textFieldExpression><![CDATA[$F{sexo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="167" y="16" width="21" height="20" forecolor="#000000" uuid="07e36ee9-411f-418a-935e-17129693b2a3"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DUI:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="188" y="16" width="100" height="20" uuid="65b0f29e-165c-41ce-9b02-fefc9555e2d0"/>
+				<textFieldExpression><![CDATA[$F{DUI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="16" width="48" height="20" forecolor="#000000" uuid="99eca3d4-de35-48a8-9ad3-17f54b5eca9e"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefono:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="348" y="16" width="108" height="20" uuid="24a4e89b-2d67-480c-800e-82d5afd0405e"/>
+				<textFieldExpression><![CDATA[$F{telefonoEmpleado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="468" y="16" width="48" height="20" forecolor="#000000" uuid="c679b243-0f48-4b2f-a15f-55794c3ce201"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Edad:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="516" y="16" width="39" height="20" uuid="6199132a-b2e5-4a78-abad-b60dab8f59dc"/>
+				<textFieldExpression><![CDATA[$F{edad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="138" width="100" height="20" uuid="10df6ecd-b92d-4c45-acd1-ec1812b49058"/>
+				<textFieldExpression><![CDATA[$F{ventasentreano}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="86" width="167" height="26" backcolor="#D66A6B" uuid="0e62baa0-a958-45b6-b639-c93c9cb434b6"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="300" y="138" width="157" height="20" forecolor="#FFFFFF" uuid="dfe15369-94a7-49df-b32b-4b9ed4159c7b"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Ventas entre meses:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="86" width="157" height="20" forecolor="#FFFFFF" uuid="1bf92092-961f-4db1-b0ef-a9c585792ab4"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Ventas en el año anterior:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="468" y="138" width="87" height="20" uuid="a972183c-32cb-4c2d-a857-4c928fc0f673"/>
+				<textFieldExpression><![CDATA[$F{ventasentremes}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="138" width="157" height="20" forecolor="#FFFFFF" uuid="a62ae9a4-0fa1-4c3e-aeeb-0b99b239723a"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Ventas entre años:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="46" width="555" height="21" backcolor="#5E2D4F" uuid="7d38368b-1073-4c1f-ad9a-497e2b6b8006"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="243" y="46" width="188" height="20" forecolor="#FFFFFF" uuid="97814443-1b3d-4304-8bec-e727be91f45c"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ventas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="468" y="86" width="87" height="20" uuid="6a6c9bcc-bc0f-4196-9ddb-4d0a9b207a40"/>
+				<textFieldExpression><![CDATA[$F{ventasmes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="86" width="100" height="20" uuid="bf4304c2-d806-49f4-8ffa-efdbc4c25141"/>
+				<textFieldExpression><![CDATA[$F{ventasano}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="80" width="157" height="20" forecolor="#FFFFFF" uuid="986424f2-1655-484c-9ca4-580d9b294208"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Ventas el mes anterior:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="167" y="191" width="100" height="26" backcolor="#D66A6B" uuid="cc78b8ca-ead0-4bb6-88ea-a0636b5fc9db"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="167" y="191" width="100" height="20" forecolor="#FFFFFF" uuid="d151b5ee-1c60-4f79-a483-a35e880ef8d9"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Ventas en total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="274" y="191" width="100" height="20" uuid="dd735574-2eb2-4801-b664-2fd624e17270"/>
+				<textFieldExpression><![CDATA[$F{ventas}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="333" width="167" height="26" backcolor="#D66A6B" uuid="5227e45a-2625-4a1d-b711-6d335e71eea9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="311" y="333" width="157" height="26" backcolor="#D66A6B" uuid="49cabe87-2e31-4990-9fe2-ddbeb4fc791b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="333" width="157" height="20" forecolor="#FFFFFF" uuid="d8d5fd84-b614-4b41-8e56-4f631da70ff5"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Ventas entre años:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="167" y="392" width="100" height="26" backcolor="#D66A6B" uuid="c8051cb0-216d-4e3e-aaec-cbee26bbf106"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="311" y="333" width="157" height="20" forecolor="#FFFFFF" uuid="c6d2570c-7aab-4966-8413-41edb6aefbab"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Rentas entre meses:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="311" y="284" width="157" height="26" backcolor="#D66A6B" uuid="dc591517-a8e6-46a4-a770-50fbc8460daa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="284" width="167" height="26" backcolor="#D66A6B" uuid="233b80c1-587b-46d4-bfa1-5ac09564fe09"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="237" width="555" height="21" backcolor="#5E2D4F" uuid="58a4ccc8-6382-4e5e-8705-0bae4ebcccf0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="243" y="238" width="188" height="20" forecolor="#FFFFFF" uuid="019b21ac-198c-48de-b295-e09bb3d3fe76"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rentas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="284" width="157" height="20" forecolor="#FFFFFF" uuid="08831711-92f4-4674-9ffe-ed316231d3ba"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Rentas en el año anterior:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="284" width="157" height="20" forecolor="#FFFFFF" uuid="bd92da6c-ccfd-48a2-9104-347f91980f06"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Rentas el mes anterior:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="392" width="100" height="20" forecolor="#FFFFFF" uuid="a6546e74-8991-40e9-b496-441aae0454df"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Rentas en total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="174" y="284" width="100" height="20" uuid="14c764ed-7759-4cd0-963a-e74832082598"/>
+				<textFieldExpression><![CDATA[$F{rentasano}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="284" width="75" height="20" uuid="7bd97a99-0f42-453b-b31b-3bc2ea410ef2"/>
+				<textFieldExpression><![CDATA[$F{rentasmes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="333" width="100" height="20" uuid="a3f2c1b5-29f4-4dbd-a887-fe13314198f5"/>
+				<textFieldExpression><![CDATA[$F{rentasentreano}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="333" width="75" height="20" uuid="fb2b18b3-9c38-491c-9857-11695f040b57"/>
+				<textFieldExpression><![CDATA[$F{rentasentremes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="392" width="100" height="20" uuid="e32c81fc-164a-463a-9c27-fec68083d101"/>
+				<textFieldExpression><![CDATA[$F{rentas}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="518" width="555" height="21" backcolor="#5E2D4F" uuid="52d35572-8afb-45e4-b01c-4b15b341d5f2"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="498" width="555" height="20" forecolor="#FF0000" uuid="20105073-c58e-469b-8bb2-5a13c3570583"/>
+				<text><![CDATA[Las ventas/rentas entre años y meses, se toman en cuenta desde un año o mes anterior respecto a la fecha actual]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="329" y="459" width="114" height="26" backcolor="#D66A6B" uuid="2d10708e-3a68-4824-85b0-18f7a05cb12e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="333" y="459" width="110" height="20" forecolor="#FFFFFF" uuid="153be016-c2a4-408a-8e48-447ac4ef3719"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Correo empleado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="456" y="459" width="100" height="20" uuid="241d0b52-135f-4140-bd45-1eb62827f368"/>
+				<textFieldExpression><![CDATA[$F{correoEmpleado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="21">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="21" backcolor="#5E2D4F" uuid="f63aa952-b029-43e3-81eb-b05b9b68325f"/>
+			</rectangle>
+			<textField>
+				<reportElement x="455" y="1" width="100" height="20" forecolor="#FFFFFF" uuid="68ead7b5-3311-4d87-bdea-7b52e38544aa"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="650">
+			<stackedBarChart>
+				<chart>
+					<reportElement x="10" y="74" width="530" height="217" uuid="9b4d365c-7526-406c-8c65-33453dba46ab"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{nombreEmpleado}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{idEmpleado}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ventas}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</stackedBarChart>
+			<rectangle>
+				<reportElement x="0" y="16" width="555" height="45" backcolor="#D66A6B" uuid="500507d0-2387-420a-8c0c-fead3d44f836"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="217" y="28" width="188" height="20" forecolor="#FFFFFF" uuid="10201424-2ab5-4cac-a34a-e089472804ef"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grafica de ventas]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="309" width="555" height="45" backcolor="#D66A6B" uuid="5954b2a2-3878-4061-aadf-a0f9f6f4fdd2"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="216" y="323" width="188" height="20" forecolor="#FFFFFF" uuid="eb0b21fa-9e53-488a-a0e6-6dea795303d6"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grafica de rentas]]></text>
+			</staticText>
+			<stackedBarChart>
+				<chart>
+					<reportElement x="10" y="376" width="530" height="266" uuid="085e0f4d-e007-428f-97b7-9c3824650094"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{nombreEmpleado}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{idEmpleado}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{rentas}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</stackedBarChart>
+		</band>
+	</summary>
+</jasperReport>

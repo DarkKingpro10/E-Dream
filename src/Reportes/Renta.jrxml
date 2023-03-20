@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Renta" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5fbeee4c-e974-4207-8703-9c4bc8c52988">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="20"/>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT TOP 10 p.nombreProducto, SUM(d.cantidad) RENTADO
+FROM   tbProducto p, tbDetalleFacturaRenta d
+where p.codigoProducto = d.codigoProducto
+GROUP  BY nombreProducto
+ORDER  BY RENTADO DESC;]]>
+	</queryString>
+	<field name="nombreProducto" class="java.lang.String"/>
+	<field name="RENTADO" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="572" height="79" backcolor="#990099" uuid="d745423c-75f2-412e-80cf-979ae22eef14"/>
+			</rectangle>
+			<textField>
+				<reportElement x="213" y="28" width="120" height="20" forecolor="#FFFFFF" uuid="d04fae1a-0481-49df-b60b-ed6309791552"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="44" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="572" height="44" backcolor="#FF3366" uuid="3084d803-60b5-4012-80fb-ef7a752dfac0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="13" width="128" height="20" forecolor="#FFFFFF" uuid="f6622760-d036-46de-915f-d8098ae6f44f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha de elaboracion:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="333" y="13" width="100" height="20" forecolor="#FFFFFF" uuid="55c4b9ba-f9a8-48f7-a533-66448f6c8458"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="13" width="100" height="20" forecolor="#FFFFFF" uuid="35322d19-6219-4cb4-88ea-1dede19925ad"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Usuario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="163" y="13" width="127" height="20" forecolor="#FFFFFF" uuid="08b23713-03f4-4518-9e8d-2f0dc4f37618"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="128" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="572" height="108" backcolor="#990099" uuid="fea0e9be-1a19-4422-8c04-0a00a64cb412"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="108" width="290" height="20" backcolor="#FF3366" uuid="109c3972-9074-40c6-9eb1-693075484347"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="290" y="108" width="282" height="20" backcolor="#FF0066" uuid="511a24ec-a81c-4db9-bc61-0a64792c8491"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="113" y="108" width="100" height="20" forecolor="#FFFFFF" uuid="a7a9928f-275c-4cf0-823e-ea9f61adf5ee"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="312" y="108" width="242" height="20" forecolor="#FFFFFF" uuid="26e069c5-38f9-46f9-9ce0-d11e3846f461"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Cantidad de productos rentados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="136" y="11" width="284" height="83" forecolor="#FFFFFF" uuid="3471b3e9-f137-4854-9dbe-787a772557f2"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[TOP 10 PRODUCTOS MÁS RENTADOS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="290" height="20" uuid="483aee9d-683d-42f4-a01b-431e26a42f8e"/>
+				<textFieldExpression><![CDATA[$F{nombreProducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="0" width="282" height="20" uuid="dde45156-d4ca-4381-86b3-cd83e9ff0142"/>
+				<textFieldExpression><![CDATA[$F{RENTADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="4" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="209" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="91" y="12" width="381" height="132" uuid="7922df0d-0f4a-47db-8903-ed552ab2e92b"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{nombreProducto}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{RENTADO}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{RENTADO}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<rectangle>
+				<reportElement x="0" y="175" width="572" height="32" backcolor="#990099" uuid="9bf5a51f-6385-4e9a-a483-b2b14fc3430b"/>
+			</rectangle>
+			<textField>
+				<reportElement x="472" y="187" width="100" height="20" forecolor="#FFFFFF" uuid="70b754d4-65ce-4b37-93cf-3cc0486a0dbf"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
