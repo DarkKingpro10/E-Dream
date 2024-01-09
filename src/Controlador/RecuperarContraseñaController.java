@@ -118,7 +118,7 @@ public class RecuperarContraseñaController {
         Session sesion= Session.getDefaultInstance(propiedad);
         //Definimos las variables a utilizar para el correo
         String emisor="edreams.officialcompany@gmail.com",
-               contrasena="edreamscontra",
+               contrasena="",
                destinatario=correo,
                asunto="PIN de renovación de contraseña",
                mensaje="¡Ouch!Tal parece has olvidado tu contraseña, "
